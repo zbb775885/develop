@@ -1,1 +1,1 @@
-/work/git/learngit
+this is my first git respository

@@ -14,6 +14,8 @@ class OperMysql(object):
         self.user = user
         self.passwd = passwd
         self.database = database
+        self.table = None
+        self.item = None
     
     #获取当前主机有哪个几个数据库
     def getDataBases(self, cursor):
@@ -30,6 +32,7 @@ class OperMysql(object):
             print ('table:', dataBase)
         sqlCmd = 'use ' + dataBase
         cursor.execute(sqlCmd)
+        self.database = dataBase
         return 
 
     #获取当前数据库的tables
@@ -52,7 +55,20 @@ class OperMysql(object):
             print ('Table %s descrption: ' %(table)) 
             for tmp in descs:
                  print (' %s  ' %(tmp[0]))
+        descs = [tmp[0] for tmp in descs]
         return descs
+        
+    def useTable(self, table): 
+        if (True == debugMysql):
+            print ('table:', table)
+        self.table = table
+        return 
+    
+    def useItem(self, item): 
+        if (True == debugMysql):
+            print ('item:', item)
+        self.item = item
+        return 
         
     #获取当前数据表中的某一列的数据
     def getDataFiled(self, cursor, field, table, cond = ''):
@@ -61,12 +77,21 @@ class OperMysql(object):
         datas = cursor.fetchall()
         if (True == debugMysql):
             print ('Filed %s descrption: ' %(field))
-            for tmp in datas:
-                 print (' %s  ' %(tmp[0]))
+            #for tmp in datas:
+                # print (' %s  ' %(tmp[0]))
+        datas = [tmp[0] for tmp in datas]  
         return datas
+        
+    def useItem(self, item): 
+        if (True == debugMysql):
+            print ('table:', item)
+        self.item = item
+        return 
 
     def connectHost(self):
-        self.conn = mysql.connector.connect(host = self.host , user = self.user, passwd = self.passwd, database = self.database)
+        print("%s,%s,%s.%s" %(self.host, self.user, self.passwd, self.database))
+        #self.conn = mysql.connector.connect(host = self.host , user = self.user, passwd = self.passwd, database = self.database)
+        self.conn = mysql.connector.connect(host = self.host , user = self.user, passwd = self.passwd)
         self.cursor = self.conn.cursor()
         
     def disconnectHost(self):           
